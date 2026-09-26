@@ -8,6 +8,29 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
 
   body
-    block content
+    nav.navbar.navbar-inverse
+      .container
+        .navbar-header
+          a.navbar-brand(href='/') LearningHub
 
+        ul.nav.navbar-nav
+          li
+            a(href='/my-courses') My Courses
+
+        ul.nav.navbar-nav.navbar-right
+          li
+            a(href='/register') Register
+          li
+            a(href='/login') Login
+
+    .container
+      block content
+
+    footer
+      .container
+        .row
+          .col-xs-12
+            small &copy; LearningHub
+
+    script(src='https://code.jquery.com/jquery-3.1.1.slim.min.js')
     script(src='/javascripts/bootstrap.min.js')

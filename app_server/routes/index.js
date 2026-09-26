@@ -1,11 +1,17 @@
 const express = require('express');
-
 const router = express.Router();
 
-const ctrlMain = require('../controllers/main');
+const ctrlAccount = require('../controllers/account');
+const ctrlCourses = require('../controllers/courses');
 
-/* GET home page. */
+/* Account pages */
+router.get('/register', ctrlAccount.register);
+router.get('/login', ctrlAccount.login);
 
-router.get('/', ctrlMain.index);
+/* Courses pages */
+router.get('/', ctrlCourses.courses);
+router.get('/courses', ctrlCourses.courses);
+router.get('/course', ctrlCourses.courseInfo);
+router.get('/my-courses', ctrlCourses.myCourses);
 
 module.exports = router;
