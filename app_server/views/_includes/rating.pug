@@ -1,0 +1,8 @@
+mixin outputRating(rating)
+  span Rating: #{rating}
+  span &nbsp;
+  - for (var i = 1; i <= 5; i++)
+    if rating >= i
+      i.fa.fa-star
+    else
+      i.fa.fa-star-o

@@ -2,23 +2,23 @@ extends layout
 
 block content
   .container
-    h1 Register
+    h1= pageHeader.title
 
     form
       .form-group
-        label(for='name') Name
+        label(for='name')= form.nameLabel
         input.form-control(type='text', id='name')
 
       .form-group
-        label(for='email') Email
+        label(for='email')= form.emailLabel
         input.form-control(type='email', id='email')
 
       .form-group
-        label(for='password') Password
+        label(for='password')= form.passwordLabel
         input.form-control(type='password', id='password')
 
       .form-group
-        label(for='confirmPassword') Confirm Password
+        label(for='confirmPassword')= form.confirmPasswordLabel
         input.form-control(type='password', id='confirmPassword')
 
-      button.btn.btn-primary(type='submit') Register
+      button.btn.btn-primary(type='submit')= form.buttonText

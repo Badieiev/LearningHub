@@ -1,44 +1,27 @@
 extends layout
 
+include _includes/rating.pug
+
 block content
-	h1 All Courses
-	p Find a course and start learning new skills
+  h1= pageHeader.title
+  p= pageHeader.strapline
 
-	.row
-		.col-xs-12
-			input.form-control(
-				type='text'
-				placeholder='Search courses'
-			)
+  .row
+    .col-xs-12
+      input.form-control(
+        type='text'
+        placeholder='Search courses'
+      )
 
-	br
+  br
 
-	.row
-		.col-xs-12.col-sm-6.col-md-3
-			.panel.panel-default
-				.panel-body
-					h3
-				a(href='/course') Web Development
-					p Rating: 4.8
-					p Learn HTML, CSS and JavaScript.
-
-		.col-xs-12.col-sm-6.col-md-3
-			.panel.panel-default
-				.panel-body
-					h3 Python
-					p Rating: 4.7
-					p Learn Python programming.
-
-		.col-xs-12.col-sm-6.col-md-3
-			.panel.panel-default
-				.panel-body
-					h3 Databases
-					p Rating: 4.5
-					p Learn database fundamentals.
-
-		.col-xs-12.col-sm-6.col-md-3
-			.panel.panel-default
-				.panel-body
-					h3 Node.js
-					p Rating: 4.6
-					p Learn backend development.
+  .row
+    each course in courses
+      .col-xs-12.col-sm-6.col-md-3
+        .panel.panel-default
+          .panel-body
+            h3
+              a(href='/course')= course.name
+            p
+              +outputRating(course.rating)
+            p= course.description

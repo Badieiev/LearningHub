@@ -1,14 +1,16 @@
 extends layout
 
 block content
-  h1 My Courses
-  p Courses you are currently enrolled in.
+  h1= pageHeader.title
 
-  .row
-    .col-xs-12.col-sm-6.col-md-3
-      .panel.panel-default
-        .panel-body
-          h3
-            a(href='/course') Web Development
-          p Rating: 4.8
-          p Learn HTML, CSS and JavaScript.
+  if courses.length
+    .row
+      each course in courses
+        .col-xs-12.col-sm-6.col-md-3
+          .panel.panel-default
+            .panel-body
+              h3= course.name
+              p Rating: #{course.rating}
+              p= course.description
+  else
+    p= message

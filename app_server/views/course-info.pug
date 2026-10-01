@@ -1,21 +1,29 @@
 extends layout
 
+include _includes/rating.pug
+
 block content
   .row
     .col-xs-12
-      h1 Web Development
+      h1= course.name
 
   .row
     .col-xs-12.col-md-8
       .panel.panel-default
         .panel-body
           h3 Course Information
-          p Rating: 4.8
-          p Learn HTML, CSS and JavaScript.
+          p
+            +outputRating(course.rating)
+          p= course.description
 
           h3 What you will learn
-          p HTML fundamentals
-          p CSS and responsive design
-          p JavaScript fundamentals
+          each topic in course.topics
+            p= topic
 
           a.btn.btn-primary(href='#') Enroll
+
+    .col-xs-12.col-md-4
+      .panel.panel-default
+        .panel-body
+          h3 About this course
+          p= course.about
