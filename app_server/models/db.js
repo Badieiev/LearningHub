@@ -11,3 +11,6 @@ mongoose.connect(dbURI)
   .catch((err) => {
     console.log('Mongoose connection error:', err);
   });
+
+require('./courses');
+require('./users');
