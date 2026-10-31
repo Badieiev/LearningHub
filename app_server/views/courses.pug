@@ -21,7 +21,7 @@ block content
         .panel.panel-default
           .panel-body
             h3
-              a(href='/course')= course.name
+              a(href='/course/' + course._id)= course.name
             p
               +outputRating(course.rating)
             p= course.description

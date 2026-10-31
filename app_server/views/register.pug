@@ -3,22 +3,46 @@ extends layout
 block content
   .container
     h1= pageHeader.title
+    
+    if error
+      .alert.alert-danger(role='alert')
+        = error
 
-    form
+    form(action='/register', method='POST')
       .form-group
         label(for='name')= form.nameLabel
-        input.form-control(type='text', id='name')
+        input.form-control(
+          type='text',
+          id='name',
+          name='name',
+          required
+        )
 
       .form-group
         label(for='email')= form.emailLabel
-        input.form-control(type='email', id='email')
+        input.form-control(
+          type='email',
+          id='email',
+          name='email',
+          required
+        )
 
       .form-group
         label(for='password')= form.passwordLabel
-        input.form-control(type='password', id='password')
+        input.form-control(
+          type='password',
+          id='password',
+          name='password',
+          required
+        )
 
       .form-group
         label(for='confirmPassword')= form.confirmPasswordLabel
-        input.form-control(type='password', id='confirmPassword')
+        input.form-control(
+          type='password',
+          id='confirmPassword',
+          name='confirmPassword',
+          required
+        )
 
       button.btn.btn-primary(type='submit')= form.buttonText
