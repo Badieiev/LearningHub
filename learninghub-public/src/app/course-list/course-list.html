@@ -1,0 +1,36 @@
+<div class="container mt-4">
+  <h1>LearningHub Courses</h1>
+
+  <p>Explore our available online courses.</p>
+
+  @for (course of courses(); track course._id) {
+    <div class="card mt-3">
+      <div class="card-body">
+        <h5 class="card-title">{{ course.name }}</h5>
+
+        <p class="card-text">
+          {{ course.description }}
+        </p>
+        <p class="card-text">
+            <strong>Level:</strong>
+            <span
+            class="badge"
+            [class.bg-success]="course.level === 'beginner'"
+            [class.bg-warning]="course.level === 'intermediate'"
+            [class.bg-danger]="course.level === 'advanced'"
+            >
+                {{ course.level | courseLevel }}
+            </span>
+        </p>
+
+        <a href="#" class="btn btn-primary">
+          View Course
+        </a>
+      </div>
+    </div>
+      } @empty {
+    <div class="alert alert-info mt-3">
+      No courses are currently available.
+    </div>
+  }
+</div>
