@@ -12,15 +12,7 @@
           {{ course.description }}
         </p>
         <p class="card-text">
-            <strong>Level:</strong>
-            <span
-            class="badge"
-            [class.bg-success]="course.level === 'beginner'"
-            [class.bg-warning]="course.level === 'intermediate'"
-            [class.bg-danger]="course.level === 'advanced'"
-            >
-                {{ course.level | courseLevel }}
-            </span>
+          <strong>Rating:</strong> {{ course.rating }} / 5
         </p>
 
         <a href="#" class="btn btn-primary">

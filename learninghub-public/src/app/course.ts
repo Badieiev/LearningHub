@@ -2,5 +2,8 @@ export interface Course {
   _id: string;
   name: string;
   description: string;
-  level: string;
+  rating: number;
+  topics: string[];
+  about: string;
+  level?: string;
 }

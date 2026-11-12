@@ -7,6 +7,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class CourseLevelPipe implements PipeTransform {
 
   transform(value: string): string {
+    if (!value) {
+      return 'Not specified';
+    }
     switch (value.toLowerCase()) {
       case 'beginner':
         return 'Beginner Level';
@@ -21,4 +24,6 @@ export class CourseLevelPipe implements PipeTransform {
         return value;
     }
   }
+
+
 }
