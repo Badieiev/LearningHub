@@ -1,3 +1,4 @@
+require('dotenv').config();
 require('./app_api/models/db');
 
 var createError = require('http-errors');
@@ -6,6 +7,9 @@ var cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var session = require('express-session');
+var passport = require('passport');
+var mongoose = require('mongoose');
 
 var indexRouter = require('./app_server/routes/index');
 var apiRoutes = require('./app_api/routes/index');
@@ -23,6 +27,23 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: false
+  }
+}));
+
+passport.use(mongoose.model('User').createStrategy());
+passport.serializeUser(mongoose.model('User').serializeUser());
+passport.deserializeUser(mongoose.model('User').deserializeUser());
+
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/build', express.static(path.join(__dirname, 'public', 'build')));
 

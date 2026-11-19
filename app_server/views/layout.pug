@@ -17,11 +17,14 @@ html
           li
             a(href='/my-courses') My Courses
 
-        ul.nav.navbar-nav.navbar-right
+                ul.nav.navbar-nav.navbar-right
           li
             a(href='/register') Register
           li
             a(href='/login') Login
+          li
+            form(action='/logout', method='POST', style='margin: 8px 15px;')
+              button.btn.btn-default(type='submit') Logout
 
     .container
       block content

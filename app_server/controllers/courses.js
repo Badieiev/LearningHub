@@ -71,21 +71,89 @@ const courseInfo = function(req, res) {
   });
 };
 
-const myCourses = function(req, res) {
-  res.render('my-courses', {
-    title: 'My Courses',
+const myCourses = async function(req, res) {
+  try {
+    const User = require('mongoose').model('User');
 
-    pageHeader: {
-      title: 'My Courses'
-    },
+    const user = await User.findById(req.user._id)
+      .populate('enrollments.course');
 
-    message: 'You have not enrolled in any courses yet.',
-    courses: []
-  });
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    const courses = user.enrollments
+      .map(enrollment => enrollment.course)
+      .filter(course => course !== null);
+
+    return res.render('my-courses', {
+      title: 'My Courses',
+
+      pageHeader: {
+        title: 'My Courses'
+      },
+
+      message: courses.length === 0
+        ? 'You have not enrolled in any courses yet.'
+        : null,
+
+      courses: courses
+    });
+
+  } catch (err) {
+    console.error('Error loading user courses:', err);
+    return res.status(500).send('Error loading courses');
+  }
+};
+
+const enroll = async function(req, res) {
+  try {
+    const mongoose = require('mongoose');
+    const User = mongoose.model('User');
+    const Course = mongoose.model('Course');
+
+    const courseId = req.params.courseid;
+
+    if (!mongoose.isValidObjectId(courseId)) {
+      return res.status(400).send('Invalid course ID');
+    }
+
+    const course = await Course.findById(courseId);
+
+    if (!course) {
+      return res.status(404).send('Course not found');
+    }
+
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    const alreadyEnrolled = user.enrollments.some(
+      enrollment => enrollment.course.toString() === courseId
+    );
+
+    if (!alreadyEnrolled) {
+      user.enrollments.push({
+        course: course._id,
+        enrolledOn: new Date()
+      });
+
+      await user.save();
+    }
+
+    return res.redirect('/my-courses');
+
+  } catch (err) {
+    console.error('Enrollment error:', err);
+    return res.status(500).send('Enrollment failed');
+  }
 };
 
 module.exports = {
   courses,
   courseInfo,
-  myCourses
+  myCourses,
+  enroll
 };

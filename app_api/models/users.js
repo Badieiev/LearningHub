@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const passportLocalMongoose = require('passport-local-mongoose').default;
 
 const enrollmentSchema = new mongoose.Schema({
   course: {
@@ -26,6 +27,10 @@ const userSchema = new mongoose.Schema({
     type: String
   },
   enrollments: [enrollmentSchema]
+});
+
+userSchema.plugin(passportLocalMongoose, {
+  usernameField: 'email'
 });
 
 mongoose.model('User', userSchema);

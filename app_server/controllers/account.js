@@ -1,5 +1,8 @@
 const request = require('request');
 
+const mongoose = require('mongoose');
+const User = mongoose.model('User');
+
 const apiOptions = {
   server: 'http://localhost:3000'
 };
@@ -87,42 +90,75 @@ const login = function(req, res) {
   });
 };
 
-const doLogin = function(req, res) {
-  const path = '/api/login';
+const doLogin = async function(req, res) {
+  try {
+    const { email, password } = req.body;
 
-  const postdata = {
-    email: req.body.email,
-    password: req.body.password
-  };
+    const user = await User.findOne({ email });
 
-  const requestOptions = {
-    url: apiOptions.server + path,
-    method: 'POST',
-    json: postdata
-  };
+    if (user) {
+      const result = await user.authenticate(password);
 
-  request(requestOptions, (err, response, body) => {
-    if (!err && response.statusCode === 200) {
-      res.redirect('/courses');
-    } else {
-      console.log('Login API error:', body);
+      if (result.user) {
+        await new Promise((resolve, reject) => {
+          req.logIn(result.user, (err) => {
+            if (err) {
+              return reject(err);
+            }
 
-      res.render('login', {
-        title: 'Login',
+            resolve();
+          });
+        });
 
-        pageHeader: {
-          title: 'Login'
-        },
-
-        form: {
-          emailLabel: 'Email',
-          passwordLabel: 'Password',
-          buttonText: 'Login'
-        },
-
-        error: 'Incorrect email or password.'
-      });
+        return res.redirect('/courses');
+      }
     }
+
+    return res.render('login', {
+      title: 'Login',
+      pageHeader: {
+        title: 'Login'
+      },
+      form: {
+        emailLabel: 'Email',
+        passwordLabel: 'Password',
+        buttonText: 'Login'
+      },
+      error: 'Incorrect email or password.'
+    });
+
+  } catch (err) {
+    console.error('Login error:', err);
+
+    return res.status(500).render('login', {
+      title: 'Login',
+      pageHeader: {
+        title: 'Login'
+      },
+      form: {
+        emailLabel: 'Email',
+        passwordLabel: 'Password',
+        buttonText: 'Login'
+      },
+      error: 'An error occurred during login.'
+    });
+  }
+};
+
+const logout = function(req, res, next) {
+  req.logout(function(err) {
+    if (err) {
+      return next(err);
+    }
+
+    req.session.destroy(function(err) {
+      if (err) {
+        return next(err);
+      }
+
+      res.clearCookie('connect.sid');
+      return res.redirect('/login');
+    });
   });
 };
 
@@ -130,5 +166,6 @@ module.exports = {
   register,
   doRegister,
   login,
-  doLogin
+  doLogin,
+  logout
 };

@@ -49,7 +49,43 @@ const coursesReadOne = function(req, res) {
   }
 };
 
+const myCourses = async function(req, res) {
+  try {
+    const User = require('mongoose').model('User');
+
+    const user = await User.findById(req.user._id)
+      .populate('enrollments.course');
+
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
+
+    const courses = user.enrollments
+      .map(enrollment => enrollment.course)
+      .filter(course => course !== null);
+
+    return res.render('my-courses', {
+      title: 'My Courses',
+
+      pageHeader: {
+        title: 'My Courses'
+      },
+
+      message: courses.length === 0
+        ? 'You have not enrolled in any courses yet.'
+        : null,
+
+      courses: courses
+    });
+
+  } catch (err) {
+    console.error('Error loading user courses:', err);
+    return res.status(500).send('Error loading courses');
+  }
+};
+
 module.exports = {
   coursesList,
-  coursesReadOne
+  coursesReadOne,
+  myCourses
 };

@@ -20,7 +20,8 @@ block content
           each topic in course.topics
             p= topic
 
-          a.btn.btn-primary(href='#') Enroll
+          form(action='/course/' + course._id + '/enroll', method='POST')
+            button.btn.btn-primary(type='submit') Enroll
 
     .col-xs-12.col-md-4
       .panel.panel-default
