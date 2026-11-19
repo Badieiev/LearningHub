@@ -8,6 +8,10 @@ var app = require('../app');
 var debug = require('debug')('myproject:server');
 var http = require('http');
 
+var https = require('https');
+var fs = require('fs');
+var path = require('path');
+
 /**
  * Get port from environment and store in Express.
  */
@@ -20,6 +24,23 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+if (process.env.NODE_ENV !== 'production') {
+  var sslOptions = {
+    key: fs.readFileSync(
+      path.join(__dirname, '../certificates/localhost.key')
+    ),
+    cert: fs.readFileSync(
+      path.join(__dirname, '../certificates/localhost.crt')
+    )
+  };
+
+  var httpsServer = https.createServer(sslOptions, app);
+
+  httpsServer.listen(3443, function() {
+    console.log('HTTPS server running on port 3443');
+  });
+}
 
 /**
  * Listen on provided port, on all network interfaces.

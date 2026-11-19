@@ -15,6 +15,11 @@ var indexRouter = require('./app_server/routes/index');
 var apiRoutes = require('./app_api/routes/index');
 
 var app = express();
+
+if (process.env.NODE_ENV === 'production') {
+  app.set('trust proxy', 1);
+}
+
 app.use(cors({
   origin: 'http://localhost:4200'
 }));
@@ -34,7 +39,7 @@ app.use(session({
   cookie: {
     httpOnly: true,
     sameSite: 'lax',
-    secure: false
+    secure: 'auto'
   }
 }));
 
