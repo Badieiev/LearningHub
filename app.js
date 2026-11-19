@@ -51,9 +51,23 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/build', express.static(path.join(__dirname, 'public', 'build')));
+app.use('/angular', express.static(
+  path.join(__dirname, 'learninghub-public', 'dist', 'learninghub-public', 'browser')
+));
 
 app.use('/', indexRouter);
 app.use('/api', apiRoutes);
+
+app.get(['/angular', '/angular/*'], function(req, res) {
+  res.sendFile(path.join(
+    __dirname,
+    'learninghub-public',
+    'dist',
+    'learninghub-public',
+    'browser',
+    'index.html'
+  ));
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

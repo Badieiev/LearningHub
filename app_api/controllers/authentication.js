@@ -68,7 +68,15 @@ const login = async function(req, res) {
         message: 'Invalid email or password'
       });
     }
+    await new Promise((resolve, reject) => {
+      req.logIn(result.user, (err) => {
+        if (err) {
+          return reject(err);
+        }
 
+        resolve();
+      });
+    });
     return res.status(200).json({
       message: 'Login successful',
       user: {
