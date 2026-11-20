@@ -9,7 +9,7 @@ import type { Course } from './course';
 export class CourseData {
   private http = inject(HttpClient);
 
-  private apiBaseUrl = 'http://localhost:3000/api';
+  private apiBaseUrl = '/api';
 
   public async getCourses(): Promise<Course[]> {
     const url = `${this.apiBaseUrl}/courses`;
