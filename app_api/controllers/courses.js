@@ -27,23 +27,26 @@ const coursesReadOne = function(req, res) {
         if (!course) {
           return res
             .status(404)
-            .json({ message: 'courseid not found' });
+            .json({ message: 'Course not found' });
         }
 
-        res
+        return res
           .status(200)
           .json(course);
       })
       .catch(err => {
-        res
+        if (err.name === 'CastError') {
+          return res
+            .status(400)
+            .json({ message: 'Invalid course ID' });
+        }
+
+        return res
           .status(500)
-          .json({
-            message: 'Error retrieving course',
-            error: err
-          });
+          .json({ message: 'Error retrieving course' });
       });
   } else {
-    res
+    return res
       .status(400)
       .json({ message: 'No courseid in request' });
   }
